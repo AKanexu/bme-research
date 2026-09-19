@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kane XU’s research on human-in-the-loop analysis of femoral-head bone marrow edema: clinical MRI curation, MedSAM-assisted segmentation and a developing framework for reliable measurement.">
+  <meta name="author" content="Kane XU">
+  <meta name="theme-color" content="#142d45">
+  <meta property="og:title" content="From Segmentation to Reliable Measurement — Kane XU">
+  <meta property="og:description" content="A dual-centre clinical MRI project, from radiologist prompting to acquisition-aware BME measurement. Pilot tested; cohort annotation ongoing; formal reliability evaluation planned.">
+  <meta property="og:type" content="website">
+  <title>From Segmentation to Reliable Measurement · Kane XU</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23142d45'/%3E%3Cpath d='M7 11l9-5 9 5-9 5zM7 16l9 5 9-5M7 21l9 5 9-5' fill='none' stroke='%2355ccce' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Kane XU, back to top">Kane <strong>XU</strong><span>Research portfolio</span></a>
+    <nav aria-label="Main navigation"><a href="#evolution">Project story</a><a href="#measurement">Measurement</a><a href="#contributions">My work</a><a href="#status">Status</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" id="top" aria-labelledby="project-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Clinical imaging · Human–AI collaboration</p>
+        <h1 id="project-title">From segmentation<br>to reliable<br><em>measurement.</em></h1>
+        <p class="subtitle">Quantitative analysis of femoral-head bone marrow edema on heterogeneous routine MRI</p>
+        <p class="hero-intro">A dual-centre clinical research project combining radiologist collaboration, promptable segmentation and acquisition-aware measurement. The aim is to establish when a lesion measurement is reproducible enough to support clinical interpretation.</p>
+        <div class="hero-status"><span class="badge complete">Pilot tested</span><span class="badge active">Cohort annotation ongoing</span></div>
+        <a class="text-link" href="#question">Explore the research <span aria-hidden="true">↓</span></a>
+      </div>
+      <figure class="hero-figure">
+        <picture><source media="(max-width: 1000px)" srcset="assets/project_overview_mobile.svg"><img src="assets/project_overview.svg" width="640" height="570" alt="Conceptual diagram: native MRI slice masks become physical areas, which must be combined using actual slice positions before a volume can be interpreted."></picture>
+        <figcaption><span class="figure-number">Fig. 01</span> The developing measurement framework. Original schematic; no patient data or measured result is shown.</figcaption>
+      </figure>
+    </section>
+    <div class="glance wrap" aria-label="Project at a glance">
+      <div><strong>Two centres</strong><span>Routine clinical MRI</span></div>
+      <div><strong>Two imaging planes</strong><span>Coronal + axial</span></div>
+      <div><strong>Complementary contrasts</strong><span>T1 + fluid-sensitive MRI</span></div>
+      <div><strong>Human verification</strong><span>Before quantitative interpretation</span></div>
+    </div>
+    <section class="section wrap" id="question" aria-labelledby="question-title">
+      <div class="section-heading"><p class="eyebrow">01 / Research question</p><h2 id="question-title">A plausible mask is the beginning.</h2></div>
+      <div class="section-body">
+        <p class="lead">Can foundation-model-assisted segmentation produce reliable, clinically useful BME measurements from the MRI that hospitals already acquire?</p>
+        <p>Bone marrow edema (BME) has diffuse boundaries. In osteonecrosis of the femoral head, it can also obscure the boundaries of necrotic tissue. The two targets must be distinguished. Routine scans add thick slices, anisotropy, protocol variation and reader subjectivity to the measurement problem. <a class="cite" href="#ref-6" aria-label="Reference 6">[6]</a></p>
+        <p>Quantitative BME analysis has a long history. This project brings together clinical data curation, radiologist interaction, segmentation assistance and a developing reliability framework, with continuous lesion burden as the eventual measurement of interest. <a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a> <a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a></p>
+        <div class="centre-grid">
+          <article class="centre"><h3>Centre A</h3><p class="meta">Relatively standardised acquisition</p><p>The audited series are 1.5 T, predominantly with 4 mm nominal slices. More detailed report fields support the planned clinical association analysis.</p></article>
+          <article class="centre"><h3>Centre B</h3><p class="meta">Greater protocol variation</p><p>The audited series are 3 T, mostly with 3–4 mm nominal slices, with thicker outliers. This source also supplied the initial segmentation pilot.</p></article>
+        </div>
+        <p class="small-note">The scientific contrast is robustness across clinical acquisition conditions. Centre, scanner, protocol and patient-population effects are confounded. The final eligible cohort is being reconciled, so no overall patient count is reported here.</p>
+      </div>
+    </section>
+    <section class="section wrap" id="evolution" aria-labelledby="evolution-title">
+      <div class="section-heading"><p class="eyebrow">02 / Project evolution</p><h2 id="evolution-title">The data changed the research.</h2></div>
+      <div class="section-body">
+        <ol class="evolution">
+          <li><span class="step-no" aria-hidden="true">1</span><div><h3>Sequence labels needed clinical context.</h3><p>Exact naming rules missed fluid-sensitive series when protocol descriptions varied or sequence-name fields were empty. I developed broader candidate classes that combine available descriptors with DICOM-derived orientation, followed by explicit review flags.</p><p class="lesson">Research consequence: establish what was acquired before deciding what to measure.</p></div></li>
+          <li><span class="step-no" aria-hidden="true">2</span><div><h3>A reported page was not a spatial index.</h3><p>Early exports conflated report-referenced frames with sorted slice position. The export logic was revised to preserve a traceable link to the source DICOM and to keep report-frame selection separate from physical ordering.</p><p class="small-note">Current local exporters match reported frames to InstanceNumber. Agreement with the clinical viewer still needs case-level confirmation; that metadata field is not a universal viewer-page guarantee.</p><p class="lesson">Research consequence: clinical references and image provenance must stay aligned.</p></div></li>
+          <li><span class="step-no" aria-hidden="true">3</span><div><h3>A useful initial mask still needed review.</h3><p>The small MedSAM pilot produced masks that could be scored and inspected, while qualitative feedback identified incomplete or excessive boundaries, particularly near joint effusion. This made expert verification and correction central to the developing workflow.</p><p class="lesson">Research consequence: evaluate the measurement and the work needed to trust it.</p></div></li>
+        </ol>
+      </div>
+    </section>
+    <div class="band">
+      <section class="section wrap" id="workflow" aria-labelledby="workflow-title">
+        <div class="section-heading"><p class="eyebrow">03 / Human–AI workflow</p><h2 id="workflow-title">Expert judgement stays in the loop.</h2><span class="badge complete">Small pilot completed</span></div>
+        <div class="section-body">
+          <p class="lead">Radiologists define the target. The model supplies an initial contour. Verification determines what can become a measurement.</p>
+          <p>MedSAM translates a bounding-box prompt into a candidate mask. It is a replaceable component of the research workflow; lesion identity, boundaries and correction decisions remain clinical responsibilities. <a class="cite" href="#ref-3" aria-label="Reference 3">[3]</a></p>
+          <figure class="workflow-figure"><img src="assets/human_ai_workflow.svg" width="1000" height="270" loading="lazy" alt="Workflow: lesion identification and bounding box, MedSAM initial mask, expert review, correction if needed, then a verified mask. The first three stages have local pilot evidence; full-cohort correction and verification are ongoing development."><ol class="workflow-mobile"><li><strong>Identify &amp; prompt</strong><span>Lesion + bounding box · pilot tested</span></li><li><strong>MedSAM initial mask</strong><span>Candidate boundary · pilot tested</span></li><li><strong>Expert review</strong><span>Assessment and flags · pilot tested</span></li><li><strong>Correct as needed</strong><span>Expert revision · cohort workflow developing</span></li><li><strong>Verified mask</strong><span>For measurement · cohort work in progress</span></li></ol><figcaption><span class="figure-number">Fig. 02</span> The small bbox → MedSAM → review pilot is complete. Full-cohort correction, verified masks and downstream measurements remain work in progress.</figcaption></figure>
+          <div class="pilot">
+            <div><p class="eyebrow">Recorded pilot evidence</p><p class="pilot-lead">64</p><h3>scored mask outputs</h3><p>Across 19 case records in Centre B. Of 69 selected image rows, 64 had annotated prompts and produced saved masks; five were skipped without a box.</p><p><strong>19 of 64 received the highest recorded score.</strong> The pilot established a reviewable technical workflow and a clear need for further expert input.</p></div>
+            <figure aria-label="Recorded review scores: score 4, 19 outputs; score 3, 36; score 2, 6; score 1, 3; score 0, 0.">
+              <div class="score-chart" aria-hidden="true">
+                <div class="score-row"><span>Score 4</span><div class="score-track"><div class="score-bar" style="width:52.78%"></div></div><strong>19</strong></div>
+                <div class="score-row"><span>Score 3</span><div class="score-track"><div class="score-bar" style="width:100%"></div></div><strong>36</strong></div>
+                <div class="score-row"><span>Score 2</span><div class="score-track"><div class="score-bar" style="width:16.67%"></div></div><strong>6</strong></div>
+                <div class="score-row"><span>Score 1</span><div class="score-track"><div class="score-bar" style="width:8.33%"></div></div><strong>3</strong></div>
+                <div class="score-row"><span>Score 0</span><div class="score-track"></div><strong>0</strong></div>
+              </div>
+              <figcaption>Counts from the recorded pilot review. Historical descriptions of the middle scores differ, so these are shown as raw scores. They are not independent accuracy estimates, correction-time measurements or a validated clinical reference standard.</figcaption>
+            </figure>
+          </div>
+          <article class="tool-box" aria-labelledby="tool-title">
+            <p class="eyebrow">Radiologist annotation tool</p><h3 id="tool-title">Built for the practical work of annotation</h3>
+            <p>I developed a Windows-compatible desktop tool and portable export packages for collaborating radiologists. The tool keeps the selected image, side and report-frame context with each annotation.</p>
+            <ul class="feature-grid"><li>Multiple bounding boxes on one image</li><li>Zoom and pan with native-coordinate export</li><li>Browse images and return to earlier work</li><li>Save progress and resume at pending images</li><li>Done, skipped and uncertain QC states</li><li>Separate image-status and box-level CSVs</li></ul>
+            <div class="keys"><span><kbd>Enter</kbd> Save &amp; next</span><span><kbd>W</kbd> Uncertain</span><span><kbd>Q</kbd> Save &amp; exit</span></div>
+            <p class="small-note" style="margin-top:18px;margin-bottom:0">Doctors are currently annotating the bulk of the cohort. These are exported-image annotation tools; the full-cohort connection to reviewed segmentation and measurement is still being developed.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+    <section class="section wrap" id="measurement" aria-labelledby="measurement-title">
+      <div class="section-heading"><p class="eyebrow">04 / Physical-space quantification</p><h2 id="measurement-title">Every pixel needs a physical context.</h2><span class="badge active">Under development</span></div>
+      <div class="section-body">
+        <p class="lead">A mask’s pixel count becomes an area through pixel spacing. A stack of areas becomes a volume through the geometry of the acquisition.</p>
+        <p>The pipeline already extracts DICOM geometry and estimates inter-slice distances. The developing volumetry method uses PixelSpacing, ImagePositionPatient and ImageOrientationPatient to retain that physical context through to the final estimate.</p>
+        <div class="equation" role="group" aria-label="Proposed physical area and volume equations">
+          <div>A<sub>i</sub> = N<sub>i</sub> × Δx<sub>i</sub> × Δy<sub>i</sub></div>
+          <div>V ≈ Σ ½(A<sub>i</sub> + A<sub>i+1</sub>) × |s<sub>i+1</sub> − s<sub>i</sub>|</div>
+          <small>N is the number of mask pixels; Δx and Δy are in-plane spacings in mm; s is slice position projected onto the slice normal. Area is in mm² and volume in mm³ (1,000 mm³ = 1 mL).</small>
+        </div>
+        <figure class="geometry"><picture><source media="(max-width: 1000px)" srcset="assets/physical_space_mobile.svg"><img src="assets/physical_space_quantification.svg" width="900" height="270" loading="lazy" alt="Schematic of acquired slices separated by unequal physical distances. Nominal slice thickness describes a slab, whereas adjacent centre positions determine the integration intervals."></picture><figcaption><span class="figure-number">Fig. 03</span> Nominal thickness and centre-to-centre distance describe different properties. The proposed integration uses actual positions; the diagram is schematic and has no patient-derived values.</figcaption></figure>
+        <p>For consistently oriented parallel slices, neighbouring cross-sectional areas can be integrated over their actual separation. This avoids blindly multiplying by nominal SliceThickness. It still requires verified lesion coverage, a defined endpoint policy and explicit handling of gaps and partial-volume effects.</p>
+        <p class="small-note">Technical components have undergone small-scale testing. Full-cohort physical volumes and measurement validation are not yet reported. Geometry handling cannot recover unobserved anatomy from thick slices.</p>
+        <div class="qc-summary">
+          <div><span class="badge complete">Implemented foundations</span><h3>Acquisition metadata and initial QC</h3><p>Geometry extraction; projected spacing summaries; variable-spacing warnings; nominal thickness/spacing checks; metadata-completeness warnings; slice-order diagnostics.</p></div>
+          <div><span class="badge active">Developing measurement QC</span><h3>Define when a volume is reportable</h3><p>Explicit duplicate/missing-position checks, all-slice orientation consistency, complete lesion coverage and rejection rules need to be consolidated and validated.</p></div>
+        </div>
+        <details class="technical"><summary>Measurement assumptions and safeguards</summary><ul><li>Return model masks to their native image grid before applying pixel spacing. Merge overlapping prompts without double-counting.</li><li>Project physical positions onto a consistent normal derived from image orientation. Arbitrary image ordering is not physical geometry.</li><li>Do not bridge missing or unreviewed slices as if lesion extent were known. Selected report frames alone are insufficient to establish a complete lesion volume.</li><li>Define the full lesion anatomy, including extension into the neck where present, and quantify sensitivity to terminal slices, gaps and anisotropic sampling.</li></ul></details>
+      </div>
+    </section>
+    <section class="section wrap" id="reliability" aria-labelledby="reliability-title">
+      <div class="section-heading"><p class="eyebrow">05 / Reliability framework</p><h2 id="reliability-title">Trust must survive changes in reader, plane and centre.</h2><span class="badge planned">Formal analyses planned</span></div>
+      <div class="section-body">
+        <p>Agreement in the derived measurement is the central endpoint. The design separates reader variability, acquisition effects and external robustness, and will report uncertainty alongside point estimates. <a class="cite" href="#ref-7" aria-label="Reference 7">[7]</a> <a class="cite" href="#ref-8" aria-label="Reference 8">[8]</a></p>
+        <table class="reliability"><caption class="small-note" style="text-align:left;margin-bottom:18px">Planned validation questions and measures; no formal reliability results are reported.</caption><thead><tr><th scope="col">Dimension</th><th scope="col">Question and evaluation</th><th scope="col">Status</th></tr></thead><tbody>
+          <tr><th scope="row">Inter-reader reference</th><td>Two independent senior-radiologist reads on a predefined subset. Dice and normalised surface Dice for masks; ICC and Bland–Altman for volume; kappa for grade. Preserve independent readings before consensus.</td><td><span class="badge planned">Planned analysis</span></td></tr>
+          <tr><th scope="row">Coronal–axial agreement</th><td>Quantify matched lesions independently in each plane. Assess physical correspondence, then compare volumes with ICC, Bland–Altman and absolute/percentage differences.</td><td><span class="badge planned">Planned analysis</span></td></tr>
+          <tr><th scope="row">External-centre robustness</th><td>Develop and internally assess the measurement protocol in the more standardised dataset, then evaluate a frozen workflow on unused heterogeneous-centre cases.</td><td><span class="badge planned">Design only</span></td></tr>
+          <tr><th scope="row">Expert effort</th><td>Evaluate whether MedSAM2 propagation reduces total prompting, review and correction time while preserving measurement agreement. <a class="cite" href="#ref-4" aria-label="Reference 4">[4]</a></td><td><span class="badge planned">Planned evaluation</span></td></tr>
+        </tbody></table>
+        <p class="small-note" style="margin-top:22px">Multicentre reliability has not started. Because Centre B contributed the existing pilot, it cannot be described as an untouched external centre. The final held-out split must exclude development cases and disclose prior protocol exposure.</p>
+        <details class="technical"><summary>Why two imaging planes are not interchangeable 3D scans</summary><p>Coronal and axial routine MRI sample anatomy differently. Anisotropic slices, obliquity, motion and partial-volume effects can change the measured boundary. Physical-coordinate correspondence, and rigid registration where justified, support comparison; they do not make these acquisitions equivalent high-resolution observations.</p><p>Where label transfer is needed, nearest-neighbour resampling will preserve label values. Volume estimates should remain on the native acquisition grids. The planned analysis will specify agreement tolerances and account for repeated observations within a patient.</p></details>
+      </div>
+    </section>
+    <section class="section wrap" id="clinical" aria-labelledby="clinical-title">
+      <div class="section-heading"><p class="eyebrow">06 / Clinical interpretation</p><h2 id="clinical-title">Does continuous burden add information?</h2><span class="badge planned">Planned analysis</span></div>
+      <div class="section-body">
+        <p class="lead">The clinical comparator is an existing BME extension grade.</p>
+        <div class="grades" aria-label="Existing BME extension grades"><div class="grade"><b>Grade I</b><p>Within the femoral head.</p></div><div class="grade"><b>Grade II</b><p>Beyond the head, within the femoral neck.</p></div><div class="grade"><b>Grade III</b><p>Beyond the femoral neck.</p></div></div>
+        <p>These categories describe anatomical extent. A continuous volume could capture additional variation within the same grade. The study will test whether it adds interpretable information about concurrent femoral-head collapse or deformity. <a class="cite" href="#ref-6" aria-label="Reference 6">[6]</a></p>
+        <div class="model-comparison"><div><strong>Model 1</strong><p>Existing categorical BME extension grade</p></div><div><strong>Model 2</strong><p>Extension grade + continuous BME volume</p></div></div>
+        <p>The planned comparison uses the same eligible sample and appropriate covariate handling. Secondary report-derived features may include articular-surface changes, joint-space narrowing, cartilage abnormalities and effusion. Report normalisation and laterality/frame parsing already exist; validated structural-finding extraction remains downstream work.</p>
+        <p class="small-note">“Not mentioned” will remain distinct from “explicitly absent” and “uncertain.” This is a cross-sectional question about incremental information, without a claim that BME volume causes collapse or predicts future outcomes.</p>
+      </div>
+    </section>
+    <div class="band">
+      <section class="section wrap" id="contributions" aria-labelledby="contributions-title">
+        <div class="section-heading"><p class="eyebrow">07 / My contributions</p><h2 id="contributions-title">Building the chain from clinical data to a research question.</h2></div>
+        <div class="section-body">
+          <div class="contributions">
+            <article><h3>Clinical data engineering</h3><p>I implemented DICOM metadata extraction, case-table assembly, sequence classification and target-series export, and investigated the mismatch between clinical frame references and spatial slice ordering.</p></article>
+            <article><h3>Tools for collaborating radiologists</h3><p>I developed the annotation interface, structured exports, progress/resume behaviour and practical installation guidance, turning lesion identification into traceable prompts for segmentation.</p></article>
+            <article><h3>A reviewable segmentation pilot</h3><p>I integrated MedSAM inference with prompt validation, saved masks and overlays, and review summaries. Clinical feedback helped identify where expert correction belongs in the workflow.</p></article>
+            <article><h3>Measurement-centred study development</h3><p>I am developing the acquisition-aware quantification and QC workflow, and shaping the planned reproducibility and clinical comparisons around the limitations of routine MRI.</p></article>
+          </div>
+          <div class="future"><h3>A foundation for the next research questions</h3><p>The project leads naturally toward medical foundation models that use spatial context with fewer expert prompts, and multimodal systems that connect images, acquisition metadata and structured clinical findings. The next step is to evaluate how those models affect measurement fidelity, uncertainty and expert workload.</p><p>This emphasis is closely related to Hoyer and colleagues’ segmentation → biomarker → clinical-utility framework. Their study evaluates different musculoskeletal targets and downstream prediction tasks; our BME measurement and reliability work is at an earlier stage. <a class="cite" href="#ref-5" aria-label="Reference 5">[5]</a></p></div>
+        </div>
+      </section>
+    </div>
+    <section class="section wrap" id="status" aria-labelledby="status-title">
+      <div class="section-heading"><p class="eyebrow">08 / Current status</p><h2 id="status-title">Pilot tested.<br>Cohort work underway.</h2></div>
+      <div class="section-body">
+        <p class="lead">The current bottleneck is the bulk radiologist bbox annotation.</p>
+        <p>Small-scale technical tests have been performed. The next stage is to carry completed cohort annotations through reviewed segmentation and quantitative analysis; formal reliability results are not yet available.</p>
+        <div class="roadmap">
+          <div><span class="badge complete">Completed</span><h3>Working foundations</h3><ul><li>Data organisation and pseudonymous case labelling</li><li>Metadata-driven curation and initial geometry/QC tools</li><li>Windows-compatible annotation workflow</li><li>Small bbox → MedSAM → scoring pilot</li></ul></div>
+          <div><span class="badge active">In progress</span><h3>Cohort preparation</h3><ul><li>Radiologist bbox annotation</li><li>Case and acquisition reconciliation</li><li>Correction and verified-mask workflow</li><li>Physical-space quantification and measurement QC</li></ul></div>
+          <div><span class="badge planned">Planned</span><h3>Formal evaluation</h3><ul><li>MedSAM2 annotation-burden evaluation</li><li>Dual-reader and cross-plane agreement</li><li>Frozen-pipeline multicentre reliability — design only</li><li>Structural phenotype extraction and incremental clinical analysis</li></ul></div>
+        </div>
+        <p class="status-date">Status reviewed September 2026. “Completed” describes the stated component or pilot, not full-cohort clinical validation.</p>
+      </div>
+    </section>
+    <section class="section wrap" id="limitations" aria-labelledby="limitations-title">
+      <div class="section-heading"><p class="eyebrow">09 / Limitations</p><h2 id="limitations-title">The conditions of a measurement matter.</h2></div>
+      <div class="section-body"><ul class="limits">
+        <li><strong>Retrospective clinical sampling.</strong> Eligibility, referral patterns and available reports can introduce selection effects. The pilot is small and selected.</li>
+        <li><strong>Thick-slice, anisotropic MRI.</strong> Physical geometry improves accounting, but partial-volume effects, gaps and uncertain boundaries remain.</li>
+        <li><strong>Human interpretation.</strong> BME extent is subjective. Independent readers, a harmonised rubric and correction records are needed for a defensible reference.</li>
+        <li><strong>Confounded acquisition differences.</strong> Two centres do not isolate scanner field strength, and prior pilot exposure must be considered in external evaluation.</li>
+        <li><strong>Clinical evidence is still developing.</strong> Reports are imperfectly standardised. No longitudinal outcome analysis, validated biomarker or clinical deployment is claimed.</li>
+      </ul></div>
+    </section>
+    <section class="section wrap" id="references" aria-labelledby="references-title">
+      <div class="section-heading"><p class="eyebrow">10 / Selected references</p><h2 id="references-title">Research this project builds on.</h2></div>
+      <div class="section-body"><ol class="references">
+        <li id="ref-1">Mayerhoefer ME et al. <a href="https://doi.org/10.2214/ajr.182.6.1821399">Computer-assisted quantitative analysis of bone marrow edema of the knee: initial experience with a new method.</a> <i>AJR</i>, 2004.<span class="ref-note">Early quantitative BME measurement and observer variability.</span></li>
+        <li id="ref-2">Pang J et al. <a href="https://doi.org/10.1186/1471-2474-14-3">Quantification of bone marrow lesion volume and volume change using semi-automated segmentation: data from the osteoarthritis initiative.</a> <i>BMC Musculoskeletal Disorders</i>, 2013.<span class="ref-note">Volume, ordinal scoring, reader reliability and structural associations.</span></li>
+        <li id="ref-3">Ma J et al. <a href="https://doi.org/10.1038/s41467-024-44824-z">Segment anything in medical images.</a> <i>Nature Communications</i>, 2024.<span class="ref-note">Promptable medical-image segmentation with MedSAM.</span></li>
+        <li id="ref-4">Ma J et al. <a href="https://arxiv.org/abs/2504.03600">MedSAM2: Segment Anything in 3D Medical Images and Videos.</a> <i>arXiv:2504.03600</i>, 2025. Preprint.<span class="ref-note">Spatial propagation and human-in-the-loop annotation studies.</span></li>
+        <li id="ref-5">Hoyer G et al. <a href="https://doi.org/10.1038/s41746-026-02520-w">Clinical utility of foundation models in musculoskeletal MRI for biomarker fidelity and predictive outcomes.</a> <i>npj Digital Medicine</i>, 2026.<span class="ref-note">A measurement-centred framework; a different study and level of validation.</span></li>
+        <li id="ref-6">Ikemura S et al. <a href="https://doi.org/10.1038/s41598-022-23427-y">The influence of bone marrow edema for the assessment of the boundaries of necrotic lesions in patients with osteonecrosis of the femoral head.</a> <i>Scientific Reports</i>, 2022.<span class="ref-note">ONFH boundary interpretation and BME extension grades I–III.</span></li>
+        <li id="ref-7">Raunig DL et al. <a href="https://doi.org/10.1177/0962280214537344">Quantitative imaging biomarkers: a review of statistical methods for technical performance assessment.</a> <i>Statistical Methods in Medical Research</i>, 2015 (online 2014).<span class="ref-note">Bias, repeatability, reproducibility and study-design conditions.</span></li>
+        <li id="ref-8">Shukla-Dave A et al. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6526078/">Quantitative Imaging Biomarkers Alliance (QIBA) recommendations for improved precision of DWI and DCE-MRI derived biomarkers in multicenter oncology trials.</a> <i>Journal of Magnetic Resonance Imaging</i>, 2019.<span class="ref-note">Acquisition and QC principles; not a BME-specific validation standard.</span></li>
+      </ol></div>
+    </section>
+    <aside class="privacy wrap" aria-label="Privacy and data availability"><strong>Privacy &amp; data availability.</strong> Research exports use pseudonymous case labels. Raw clinical data, linkage tables and reports are not publicly released. All figures on this page are original scientific schematics. Comprehensive de-identification and permission to share must be verified before adding any clinical example.</aside>
+  </main>
+  <footer id="contact" class="site-footer wrap"><div><strong>Kane XU</strong><p>Clinical imaging, reliable measurement and human–AI collaboration.</p></div><a href="mailto:kane.y.xu@gmail.com">kane.y.xu@gmail.com <span aria-hidden="true">↗</span></a></footer>
+</body>
+</html>
