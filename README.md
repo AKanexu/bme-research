@@ -1,5 +1,7 @@
 # BME research portfolio
 
+[View the research page](https://akanexu.github.io/bme-research/) · [Public source repository](https://github.com/AKanexu/bme-research)
+
 A self-contained research page for **Kane XU** on human-in-the-loop BME measurement from routine clinical MRI. It distinguishes completed pilot work, ongoing cohort annotation and planned formal validation.
 
 ## Preview
