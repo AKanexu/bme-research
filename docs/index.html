@@ -46,7 +46,7 @@
     <section class="section wrap" id="question" aria-labelledby="question-title">
       <div class="section-heading"><p class="eyebrow">01 / Research question</p><h2 id="question-title">A plausible mask is the beginning.</h2></div>
       <div class="section-body">
-        <p class="lead">Can foundation-model-assisted segmentation support reliable, clinically useful BME measurements from routine MRI?</p>
+        <p class="lead">Can foundation-model-assisted segmentation support reliable, clinically interpretable BME measurements from routine MRI?</p>
         <p>Diffuse lesion boundaries, thick slices and protocol variation make this a measurement problem as well as a segmentation task. Quantitative BME analysis is established; my work connects clinical data curation, radiologist interaction and acquisition-aware measurement into a traceable workflow. <a class="cite" href="#ref-1" aria-label="Reference 1">[1]</a> <a class="cite" href="#ref-2" aria-label="Reference 2">[2]</a></p>
       </div>
     </section>
@@ -54,7 +54,7 @@
       <div class="overview-heading"><div><p class="eyebrow">02 / Project overview</p><h2 id="overview-title">The measurement framework.</h2></div><span class="badge planned">Framework overview · evaluation planned</span></div>
       <figure class="master-workflow">
         <a href="assets/bme_workflow_public.png" target="_blank" rel="noopener" aria-label="Open the master scientific workflow at full resolution in a new tab"><img src="assets/bme_workflow_public.png" width="1672" height="941" alt="Seven-stage BME workflow: Centre A 3T and Centre B 1.5T routine MRI; DICOM curation and QC; radiologist bounding-box localisation; MedSAM-assisted segmentation; expert review and correction; physical-space volumetry; planned reader, plane, centre and correction-burden evaluation, followed by a planned volume-versus-extension-grade clinical comparison."></a>
-        <figcaption><span class="figure-number">Figure 1.</span> Overview of the human-in-the-loop framework for converting heterogeneous routine MRI into reliability-characterised quantitative BME measurements. <strong>Intended framework; formal validation is planned.</strong> The segmentation/review pilot is complete; cohort annotation, verified masks, volumetry and QC are in progress. Imaging examples are cleared for public display. <a href="assets/bme_workflow_public.png" target="_blank" rel="noopener">Open the full-resolution figure ↗</a></figcaption>
+        <figcaption><span class="figure-number">Figure 1.</span> Overview of the human-in-the-loop framework for converting heterogeneous routine MRI into reliability-characterised quantitative BME measurements. <strong>Intended framework; formal validation is planned.</strong> The segmentation/review pilot is complete; cohort annotation, verified masks, volumetry and QC are in progress. Imaging panels are schematic or de-identified illustrative examples and do not represent quantitative study results. <a href="assets/bme_workflow_public.png" target="_blank" rel="noopener">Open the full-resolution figure ↗</a></figcaption>
       </figure>
     </section>
     <div class="band">
@@ -92,7 +92,7 @@
         <div class="section-heading"><p class="eyebrow">05 / Human–AI workflow</p><h2 id="workflow-title">Expert judgement stays in the loop.</h2><span class="badge complete">Small pilot completed</span></div>
         <div class="section-body">
           <p class="lead">Radiologists define the target. The model supplies an initial contour. Verification determines what can become a measurement.</p>
-          <p>Bounding boxes are localisation prompts. MedSAM supplies a candidate mask, not an autonomous diagnosis; radiologists review and correct it before it can support quantitative measurement. <a class="cite" href="#ref-3" aria-label="Reference 3">[3]</a></p>
+          <p>Bounding boxes are localisation prompts. MedSAM supplies a candidate mask that requires radiologist review and correction before it can support quantitative measurement. <a class="cite" href="#ref-3" aria-label="Reference 3">[3]</a></p>
           <p class="workflow-line">Radiologist localisation → MedSAM initial mask → expert review → manual correction when needed → verified mask.</p>
           <aside class="pilot-note" aria-labelledby="pilot-title"><h3 id="pilot-title">Initial segmentation pilot</h3><p><strong>64 saved masks across 19 case records in Centre A.</strong> Expert review identified incomplete and excessive segmentations, with qualitative feedback highlighting challenging boundaries such as joint effusion.</p><p class="lesson">Methodological lesson: visually plausible automated masks still require clinically informed verification before quantitative measurement.</p><p class="small-note">Historical middle-score definitions were not fully harmonised. These observations demonstrate a reviewable pilot workflow, not validated segmentation performance.</p></aside>
           <article class="tool-box" aria-labelledby="tool-title">
@@ -188,7 +188,7 @@
         <li id="ref-8">Shukla-Dave A et al. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6526078/">Quantitative Imaging Biomarkers Alliance (QIBA) recommendations for improved precision of DWI and DCE-MRI derived biomarkers in multicenter oncology trials.</a> <i>Journal of Magnetic Resonance Imaging</i>, 2019.<span class="ref-note">Acquisition and QC principles; not a BME-specific validation standard.</span></li>
       </ol></div>
     </section>
-    <aside class="privacy wrap" aria-label="Privacy and data availability"><strong>Privacy &amp; data availability.</strong> Raw clinical datasets, linkage tables and reports are not publicly distributed. Public figures use scientific schematics and imaging examples confirmed to be de-identified and cleared for public display. Any additional clinical example requires separate de-identification and permission checks.</aside>
+    <aside class="privacy wrap" aria-label="Privacy and data availability"><strong>Privacy &amp; data availability.</strong> Raw clinical datasets, linkage tables, radiology reports and private research code are not publicly distributed. Public figures use scientific schematics and de-identified or synthetic illustrative imaging where appropriate. Any future patient-derived clinical example will require appropriate de-identification and permission review before public use.</aside>
   </main>
   <footer id="contact" class="site-footer wrap"><div><strong>Kane XU</strong><p>Clinical imaging, reliable measurement and human–AI collaboration.</p></div><a href="mailto:kane.y.xu@gmail.com">kane.y.xu@gmail.com <span aria-hidden="true">↗</span></a></footer>
 </body>
