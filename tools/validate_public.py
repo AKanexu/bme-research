@@ -3,12 +3,16 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 import re
+import hashlib
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS = ROOT / 'docs'
 errors = []
+# The author explicitly cleared this exact supplied figure for public display.
+# A replacement needs a fresh privacy review and an updated digest.
+APPROVED_PNG = {'assets/bme_workflow_public.png': 'c8efc8edf9595cd46df9f303c11e2328ecf64cceceade76151c79bc2a38695ba'}
 
 class Page(HTMLParser):
     def __init__(self):
@@ -76,6 +80,11 @@ for path in DOCS.rglob('*'):
     if not path.is_file():
         continue
     files.append(path)
+    if path.suffix == '.png':
+        expected = APPROVED_PNG.get(path.relative_to(DOCS).as_posix())
+        if expected != hashlib.sha256(path.read_bytes()).hexdigest():
+            errors.append(f'PNG is not the reviewed public asset: {path.name}')
+        continue
     if path.suffix not in {'.html', '.css', '.svg'} and path.name != '.nojekyll':
         errors.append(f'Unreviewed file type in public site: {path.name}')
         continue

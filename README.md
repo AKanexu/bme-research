@@ -19,7 +19,7 @@ Open [the local preview](http://127.0.0.1:8765/). Stop with Ctrl+C. You can also
 Use a separate repository containing **only this folder's contents**. Do not publish the enclosing clinical research workspace. The internal audit and publication checklist belong outside this repository.
 
 1. Review the page and the separate `PUBLICATION_CHECKLIST.md` before release.
-2. In GitHub Desktop, add this folder as a local repository (or create a repository here), review the file list, commit and publish it under a project name such as `bme-research`. It contains public page source and schematics only.
+2. In GitHub Desktop, add this folder as a local repository (or create a repository here), review the file list, commit and publish it under a project name such as `bme-research`. It contains public page source, schematics and the author-cleared master workflow figure.
 3. In the new GitHub repository, open **Settings → Pages → Deploy from a branch**, choose **main** and **/docs**, then save.
 4. Use the deployed address shown by GitHub Pages. Check it in a signed-out browser before sharing.
 
@@ -29,7 +29,7 @@ These are static files with relative asset paths and `.nojekyll`; project-path h
 
 - `docs/index.html`: copy, statuses, references and contact details.
 - `docs/styles.css`: responsive layout, typography and print styling.
-- `docs/assets/`: original scientific schematics, including mobile variants.
+- `docs/assets/`: the cleared master workflow and physical-space schematics, including a mobile variant.
 - `FIGURE_GUIDE.md`: optional figure replacement slots and captions.
 
 After edits, run:
@@ -38,4 +38,4 @@ After edits, run:
 python3 tools/validate_public.py
 ```
 
-The check verifies local links, references, allowed assets and known sensitive patterns. It does not certify clinical de-identification or scientific validity. Clinical files and source pipeline code are intentionally not distributed here.
+The check verifies local links, references, allowed assets and known sensitive patterns. The supplied master PNG is allowlisted by its reviewed SHA-256 digest; replacements require a new review. It does not certify clinical de-identification or scientific validity. Clinical files and source pipeline code are intentionally not distributed here.
